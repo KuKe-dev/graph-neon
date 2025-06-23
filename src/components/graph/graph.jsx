@@ -6,7 +6,8 @@ import * as math from 'mathjs';
 export default function Graph() {
 
     const canvasRef = useRef(null);
-    const [scale, setScale] = useState(5);
+    const [zoom, setZoom] = useState(10);
+    const [step, setStep] = useState(1);
 
     const [functionValue, setFunctionValue] = useState("");
 
@@ -15,12 +16,16 @@ export default function Graph() {
     const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
 
     const handleWheel = (e) => {
-        e.preventDefault(); // Prevent page scrolling
-        const zoomSpeed = 3; // Controla la velocidad del zoom
-        const newScale = e.deltaY < 0 
-            ? Math.max(2, scale - zoomSpeed)  // Zoom In (divided disminuye)
-            : Math.min(120, scale + zoomSpeed); // Zoom Out (divided aumenta)
-        setScale(newScale);
+        const zoomSpeed = 1 * step; // Controla la velocidad del zoom
+        const newZoom = e.deltaY < 0 
+            ? Math.max(2, zoom - zoomSpeed)  // Zoom In
+            : Math.min(1200, zoom + zoomSpeed); // Zoom Out
+        setZoom(newZoom);
+        setLastMousePos({ x: e.clientX, y: e.clientY });
+        setOffset(prev => ({
+            x: prev.x + (lastMousePos.x - canvasRef.current.width / 2) * (newZoom - zoom) / zoom,
+            y: prev.y + (lastMousePos.y - canvasRef.current.height / 2) * (newZoom - zoom) / zoom
+        }));
     };
 
     const handleMouseDown = (e) => {
@@ -92,76 +97,98 @@ export default function Graph() {
             const centerX = canvas.width / 2 + offset.x;
             const centerY = canvas.height / 2 + offset.y;
             
-            // Calculate units per pixel
-            const unitsPerPixelX = scale / canvas.width;
-            const unitsPerPixelY = scale / canvas.height;
+            const unitsPerPixelX = canvas.width / zoom;
+            const unitsPerPixelY = canvas.height / zoom;
+
             
-            // Calculate the coordinate range visible on screen
-            const leftUnit = -scale/2 - (offset.x * unitsPerPixelX);
-            const rightUnit = scale/2 - (offset.x * unitsPerPixelX);
-            const topUnit = scale/2 + (offset.y * unitsPerPixelY);
-            const bottomUnit = -scale/2 + (offset.y * unitsPerPixelY);
+            function setStepRecursive(unitsPerPixelX, thresholds = [ 9999, 50, 20, 10, 5, 2], steps = [1, 2, 5, 10, 20, 50], index = 0) {
+                if (index >= thresholds.length) return;
+                if (unitsPerPixelX < thresholds[index]) {
+                    setStep(steps[index]);
+                    setStepRecursive(unitsPerPixelX, thresholds, steps, index + 1);
+                }
+            }
+
+            setStepRecursive(unitsPerPixelX);
+
+            if (unitsPerPixelX < 40) {
+                setStep(2);
+            }
             
-            // Determine grid spacing based on scale
-            let gridSpacing = 1;
-            if (scale > 20) gridSpacing = Math.ceil(scale / 20);
-            else if (scale < 10) gridSpacing = 0.5;
+            if (unitsPerPixelX < 16) {
+                setStep(5);
+            }
+            
+            if (unitsPerPixelX < 8) {
+                setStep(10);
+            }
+
+            if (unitsPerPixelX < 4) {
+                setStep(20);
+            }
+
+            if (unitsPerPixelX < 1.6) {
+                setStep(50);
+            }
+            console.log(step);
+            // Draw horizontal grid lines (for X values)
+                let value = 0
+                for (let i = centerX; i >= 0 ; i -= unitsPerPixelX * step) {
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#666666';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value===0?'':value, i-10, centerY + 15);
+                    value -= step;
+                    
+                }
+                value = 0
+                for (let i = centerX; i <= canvas.width ; i += unitsPerPixelX * step) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#666666';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value, i-10, centerY + 15);
+                    value += step;
+                }
             
             // Draw vertical grid lines (for Y values)
-            const startX = Math.floor(leftUnit / gridSpacing) * gridSpacing;
-            const endX = Math.ceil(rightUnit / gridSpacing) * gridSpacing;
-            
-            for (let x = startX; x <= endX; x += gridSpacing) {
-                const pixelX = centerX + (x * canvas.width / scale);
-                
-                if (pixelX >= 0 && pixelX <= canvas.width) {
-                    // Draw vertical line
+                value = 0
+                for (let i = centerY; i >= 0 ; i -= unitsPerPixelY * step) {
                     ctx.beginPath();
-                    ctx.moveTo(pixelX, 0);
-                    ctx.lineTo(pixelX, canvas.height);
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
                     ctx.stroke();
-                    
-                    // Draw number label (skip 0 to avoid overlap with axis)
-                    if (Math.abs(x) > 0.001) {
-                        ctx.fillStyle = '#666666';
-                        ctx.font = '10px sans-serif';
-                        ctx.textAlign = 'center';
-                        const label = gridSpacing === 0.5 ? x.toFixed(1) : x.toString();
-                        ctx.fillText(label, pixelX, centerY + 15);
-                    }
+
+                    ctx.fillStyle = '#666666';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value===0?'':value, centerX - 10, i + 15);
+                    value += step;
                 }
-            }
-            
-            // Draw horizontal grid lines (for X values)
-            const startY = Math.floor(bottomUnit / gridSpacing) * gridSpacing;
-            const endY = Math.ceil(topUnit / gridSpacing) * gridSpacing;
-            
-            for (let y = startY; y <= endY; y += gridSpacing) {
-                const pixelY = centerY - (y * canvas.height / scale);
-                
-                if (pixelY >= 0 && pixelY <= canvas.height) {
-                    // Draw horizontal line
+                value = 0
+                for (let i = centerY; i <= canvas.height ; i += unitsPerPixelY * step) {
                     ctx.beginPath();
-                    ctx.moveTo(0, pixelY);
-                    ctx.lineTo(canvas.width, pixelY);
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
                     ctx.stroke();
-                    
-                    // Draw number label (skip 0 to avoid overlap with axis)
-                    if (Math.abs(y) > 0.001) {
-                        ctx.fillStyle = '#666666';
-                        ctx.font = '10px sans-serif';
-                        ctx.textAlign = 'right';
-                        const label = gridSpacing === 0.5 ? y.toFixed(1) : y.toString();
-                        ctx.fillText(label, centerX - 5, pixelY + 3);
-                    }
+
+                    ctx.fillStyle = '#666666';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value===0?'':value, centerX - 10, i + 15);
+                    value -= step;
                 }
-            }
             
-            // Draw origin label
-            ctx.fillStyle = '#666666';
-            ctx.font = '10px sans-serif';
-            ctx.textAlign = 'right';
-            ctx.fillText('0', centerX - 5, centerY + 15);
         }
 
         function validFunction(funcValue) {
@@ -189,9 +216,9 @@ export default function Graph() {
         
         drawGrid();
         drawAxis();
-        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue), scale, scale, scale/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue), zoom, zoom, zoom/400, offset);
 
-    }, [scale, functionValue, offset]);
+    }, [zoom, functionValue, offset]);
 
     
 

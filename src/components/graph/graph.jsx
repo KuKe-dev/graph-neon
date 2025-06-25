@@ -1,15 +1,27 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react"
 import { drawFunction } from "./functions";
 import * as math from 'mathjs';
 
+import './graph.css';
+import { addStyles, EditableMathField } from "react-mathquill";
+import { latex_to_js } from "../../utilities/latexToJs";
+
+
+
+
 export default function Graph() {
 
+    addStyles();
+
     const canvasRef = useRef(null);
+
     const [zoom, setZoom] = useState(10);
     const [step, setStep] = useState(1);
 
     const [functionValue, setFunctionValue] = useState("");
+    const [latexValue, setLatexValue] = useState("");
 
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -218,13 +230,22 @@ export default function Graph() {
         drawAxis();
         drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue), zoom, zoom, zoom/400, offset);
 
-    }, [zoom, functionValue, offset]);
+    }, [zoom, functionValue, offset, step]);
 
     
 
     return (
         <>
-        <input type="text" value={functionValue} onChange={(e) => setFunctionValue(e.target.value)} />
+        <div style={{background: "none"}}>
+            <EditableMathField
+            id="my-math-input"
+            style={{color: "white", display: "inline-block", padding: "10px", marginTop: "10px", marginBottom: "10px", fontSize: "20px"}}
+            latex={latexValue}
+            onChange={(mathField) => {mathField;setFunctionValue(latex_to_js(mathField.latex()));}}
+            />
+        </div>
+        <input style={{display: `${import.meta.env.VITE_PRODUCTION =='false' ? "block" : "none"}`}} type="text" value={functionValue} onChange={(e) => setFunctionValue(e.target.value)} />
+
         <div>
         <canvas
         ref={canvasRef}

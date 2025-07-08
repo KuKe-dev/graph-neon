@@ -1,5 +1,8 @@
 import { useState } from "react";
 import Graph from "../components/graph/graph";
+import Sidebar from "../components/sidebar/sidebar";
+
+import "./Home.css";
 
 export default function Home() {
 
@@ -8,7 +11,20 @@ export default function Home() {
 
     return (
         <>
-            <Graph />
+        <div className="home-container">
+            <Sidebar
+                className="sidebar"
+                latexValue={latexValue}
+                functionValue={functionValue}
+                setFunctionValue={setFunctionValue}
+            />
+            <Graph 
+                functionValue={functionValue}
+                setFunctionValue={setFunctionValue}
+                latexValue={latexValue}
+                setLatexValue={setLatexValue}
+            />
+        </div>
         </>
     )
 }

@@ -2,9 +2,10 @@ export const drawFunction = (ctx, width, height, func, xScale, yScale, step, off
     if (typeof func !== 'function') {
         return;
     }
+    console.log(func);
 
     const scaleX = width / xScale;
-    const scaleY = height / yScale;
+    const scaleY = width / yScale;
     
     // Optimización: Calcular rango de manera más eficiente
     const centerX = width / 2 + offset.x;

@@ -6,38 +6,42 @@ import * as math from 'mathjs';
 
 import './graph.css';
 import { addStyles, EditableMathField } from "react-mathquill";
-import { latex_to_js } from "../../utilities/latexToJs";
+import { min } from "mathjs";
+import { max } from "mathjs";
+/* import { latex_to_js } from "../../utilities/latexToJs"; */
 
 
 
 
-export default function Graph() {
+export default function Graph({ functionValue, setFunctionValue, latexValue, setLatexValue }) {
 
     addStyles();
 
     const canvasRef = useRef(null);
 
-    const [zoom, setZoom] = useState(10);
+    const [zoom, setZoom] = useState(100);
     const [step, setStep] = useState(1);
 
-    const [functionValue, setFunctionValue] = useState("");
-    const [latexValue, setLatexValue] = useState("");
+    /* const [functionValue, setFunctionValue] = useState(""); */
 
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
 
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
     const handleWheel = (e) => {
-        const zoomSpeed = 1 * step; // Controla la velocidad del zoom
-        const newZoom = e.deltaY < 0 
-            ? Math.max(2, zoom - zoomSpeed)  // Zoom In
-            : Math.min(1200, zoom + zoomSpeed); // Zoom Out
+        const zoomSpeed = math.ceil(zoom / 15); // Controla la velocidad del zoom
+        const newZoom = e.deltaY > 0 
+            ? min(zoom + zoomSpeed, 1000)  // Zoom In
+            : max(zoom - zoomSpeed, 5); // Zoom Out
         setZoom(newZoom);
-        setLastMousePos({ x: e.clientX, y: e.clientY });
+        /* setLastMousePos({ x: e.clientX, y: e.clientY });
         setOffset(prev => ({
             x: prev.x + (lastMousePos.x - canvasRef.current.width / 2) * (newZoom - zoom) / zoom,
             y: prev.y + (lastMousePos.y - canvasRef.current.height / 2) * (newZoom - zoom) / zoom
-        }));
+        })); */
     };
 
     const handleMouseDown = (e) => {
@@ -110,7 +114,7 @@ export default function Graph() {
             const centerY = canvas.height / 2 + offset.y;
             
             const unitsPerPixelX = canvas.width / zoom;
-            const unitsPerPixelY = canvas.height / zoom;
+            const unitsPerPixelY = canvas.width / zoom;
 
             
             function setStepRecursive(unitsPerPixelX, thresholds = [ 9999, 50, 20, 10, 5, 2], steps = [1, 2, 5, 10, 20, 50], index = 0) {
@@ -142,7 +146,6 @@ export default function Graph() {
             if (unitsPerPixelX < 1.6) {
                 setStep(50);
             }
-            console.log(step);
             // Draw horizontal grid lines (for X values)
                 let value = 0
                 for (let i = centerX; i >= 0 ; i -= unitsPerPixelX * step) {
@@ -207,10 +210,10 @@ export default function Graph() {
             if (funcValue) {
                 try {
                     // Crear la función dinámica
-                    const func = (x) => {
+                    const func = (x, y) => {
                         try {
                             
-                            return math.evaluate(funcValue, { x });
+                            return math.evaluate(funcValue, { x, y });
                             
                         } catch (e) {
                             return undefined;
@@ -235,30 +238,17 @@ export default function Graph() {
     
 
     return (
-        <>
-        <div style={{background: "none"}}>
-            <EditableMathField
-            id="my-math-input"
-            style={{color: "white", display: "inline-block", padding: "10px", marginTop: "10px", marginBottom: "10px", fontSize: "20px"}}
-            latex={latexValue}
-            onChange={(mathField) => {mathField;setFunctionValue(latex_to_js(mathField.latex()));}}
-            />
-        </div>
-        <input style={{display: `${import.meta.env.VITE_PRODUCTION =='false' ? "block" : "none"}`}} type="text" value={functionValue} onChange={(e) => setFunctionValue(e.target.value)} />
-
-        <div>
         <canvas
         ref={canvasRef}
-        width={800}
-        height={800}
+        width={width}
+        height={height}
         onWheel={e => handleWheel(e)}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={() => setIsDragging(false)}
         id="graph"
-        style={{background: "black", cursor: isDragging ? 'grabbing' : 'grab'}} />
-        </div>
-        </>
+        />
+
     )
 }

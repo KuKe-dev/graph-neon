@@ -1,0 +1,14 @@
+#my-math-input {
+    background-color: transparent;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+
+#my-math-input .mq-cursor {
+    border-color: white;
+
+}
+#my-math-input .mq-blink {
+    border-color: white;
+}

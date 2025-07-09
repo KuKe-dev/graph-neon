@@ -7,8 +7,8 @@
 
 #my-math-input .mq-cursor {
     border-color: white;
-
 }
+
 #my-math-input .mq-blink {
     border-color: white;
 }
@@ -19,39 +19,311 @@
     left: 0;
     margin: 10px;
     cursor: pointer;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    color: #00ffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.keyboard-active-button:hover {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.5),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 #latex-keyboard {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 2%;
+    right: 2%;
     margin: auto;
     bottom: 0;
-    width: 50%;
-    height: 300px;
+    width: 96%;
+    max-width: 800px;
+    min-height: 200px;
+    max-height: 50vh;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    background-color: white;
+    background: linear-gradient(135deg, 
+        #0a0a0a 0%, 
+        #1a1a1a 50%, 
+        #0a0a0a 100%);
+    border: 2px solid #00ffff;
+    border-bottom: none;
+    box-shadow: 
+        0 -10px 30px rgba(0, 255, 255, 0.3),
+        inset 0 0 50px rgba(0, 255, 255, 0.1);
     animation: showKeyboardAnimation 0.3s ease-in-out;
+    backdrop-filter: blur(10px);
+
+}
+
+#latex-keyboard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #00ffff 20%, 
+        #0080ff 50%, 
+        #00ffff 80%, 
+        transparent 100%);
+    animation: neonPulse 2s infinite;
+}
+
+#latex-keyboard > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+    height: 100%;
 }
 
 .keyboard-numbers-grid {
     display: grid;
-    grid-template-columns: repeat(4, 30px);
-    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
     padding: 10px;
+    list-style: none;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
 }
 
 .keyboard-numbers-grid button {
-    color: black;
+    padding: 8px 4px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 1px solid #00ffff;
+    border-radius: 6px;
+    color: #00ffff;
+    font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.2),
+        inset 0 0 10px rgba(0, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard-numbers-grid button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 255, 255, 0.2) 50%, 
+        transparent 100%);
+    transition: left 0.3s ease;
+}
+
+.keyboard-numbers-grid button:hover::before {
+    left: 100%;
+}
+
+.keyboard-numbers-grid button:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.keyboard-numbers-grid button:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 0 15px rgba(0, 255, 255, 0.6),
+        inset 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.keyboard-controls-flex {
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    justify-content: space-between;
+    padding: 15px;
+    list-style: none;
+    margin: 0;
+}
+
+.keyboard-controls-flex button {
+    padding: 10px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 1px solid #00ffff;
+    border-radius: 8px;
+    color: #00ffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.2),
+        inset 0 0 10px rgba(0, 255, 255, 0.05);
+    margin: 2px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.keyboard-controls-flex button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 255, 255, 0.2) 50%, 
+        transparent 100%);
+    transition: left 0.3s ease;
+}
+
+.keyboard-controls-flex button:hover::before {
+    left: 100%;
+}
+
+.keyboard-controls-flex button:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.keyboard-controls-flex button[style*="background: red"] {
+    background: linear-gradient(135deg, #ff0040 0%, #ff4080 100%) !important;
+    border-color: #ff0040 !important;
+    color: white !important;
+    box-shadow: 
+        0 0 10px rgba(255, 0, 64, 0.3),
+        inset 0 0 10px rgba(255, 0, 64, 0.1) !important;
+}
+
+.keyboard-controls-flex button[style*="background: red"]:hover {
+    background: linear-gradient(135deg, #ff4080 0%, #ff80a0 100%) !important;
+    box-shadow: 
+        0 0 20px rgba(255, 0, 64, 0.5),
+        inset 0 0 20px rgba(255, 0, 64, 0.2) !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8) !important;
+}
+
+.keyboard-controls-flex details {
+    position: relative;
+    margin: 2px 0;
+}
+
+.keyboard-controls-flex details summary {
+    padding: 8px 4px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 1px solid #00ffff;
+    border-radius: 6px;
+    color: #00ffff;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.2),
+        inset 0 0 10px rgba(0, 255, 255, 0.05);
+    list-style: none;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.keyboard-controls-flex details summary:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.keyboard-controls-flex details div {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: translateY(-100%) !important;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
+    border: 2px solid #00ffff !important;
+    border-radius: 10px !important;
+    padding: 10px !important;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.3),
+        inset 0 0 20px rgba(0, 255, 255, 0.1) !important;
+    z-index: 1000;
+}
+
+.keyboard-controls-flex details div button {
+    margin: 2px !important;
+    padding: 8px 12px !important;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
+    border: 1px solid #0080ff !important;
+    color: #0080ff !important;
+}
+
+.keyboard-controls-flex details div button:hover {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%) !important;
+    box-shadow: 
+        0 0 15px rgba(0, 128, 255, 0.4),
+        inset 0 0 15px rgba(0, 128, 255, 0.1) !important;
+    color: #00ffff !important;
+    border-color: #00ffff !important;
 }
 
 @keyframes showKeyboardAnimation {
     0% {
         opacity: 0;
+        transform: translateY(100px);
     }
     100% {
         opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes showKeyboardAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        opacity: 0.5;
+        box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
     }
 }

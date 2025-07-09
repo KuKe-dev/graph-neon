@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function LatexInput({ latexValue, functionValue, setFunctionValue }) {
 
-    const [canKeyboard, setCanKeyboard] = useState(false);
+    const [canKeyboard, setCanKeyboard] = useState(true);
     const [showKeyboard, setShowKeyboard] = useState(false);
 
     const mathFieldRef = useRef(null);
@@ -31,32 +31,13 @@ export default function LatexInput({ latexValue, functionValue, setFunctionValue
     function HanddleKeyboardKey(keyValue) {
         if (!mathFieldRef.current) return;
 
-        mathFieldRef.current.keystroke("/");
-        mathFieldRef.current.focus();
+        mathFieldRef.current.cmd(keyValue);
     }
 
     function HanddleKeyboardControls(direction) {   
         if (!mathFieldRef.current) return;
 
-        switch (direction) {
-            case 'left':
-                mathFieldRef.current.keystroke('Left');
-                break;
-            case 'right':
-                mathFieldRef.current.keystroke('Right');
-                break;
-            case 'backspace':
-                mathFieldRef.current.keystroke('Backspace');
-                break;
-            case 'delete':
-                mathFieldRef.current.keystroke('Delete');
-                break;
-            case 'esc':
-                mathFieldRef.current.keystroke('Esc');
-                break;
-            default:
-                break;
-        }
+        mathFieldRef.current.keystroke(direction);
 
         mathFieldRef.current.focus();
     }
@@ -87,31 +68,54 @@ export default function LatexInput({ latexValue, functionValue, setFunctionValue
                 onMouseDown={(e) => e.preventDefault()}
             >
                 <div style={{display: "flex"}}>
-                    <ul>
-                        <button onClick={() => HanddleKeyboardKey('\\pi')}><StaticMathField >{'\\pi'}</StaticMathField></button>
-                    </ul>
                     <ul className="keyboard-numbers-grid">
-                        <button onClick={() => HanddleKeyboardKey('1')}>1</button>
-                        <button onClick={() => HanddleKeyboardKey('2')}>2</button>
-                        <button onClick={() => HanddleKeyboardKey('3')}>3</button>
-                        <button onClick={() => HanddleKeyboardKey('/')}>÷</button>
-                        <button>4</button>
-                        <button>5</button>
-                        <button>6</button>
-                        <button>*</button>
-                        <button>7</button>
-                        <button>8</button>
-                        <button>9</button>
-                        <button>-</button>
-                        <button>0</button>
-                        <button>.</button>
-                        <button>=</button>
-                        <button>+</button>
+                        <button onClick={() => HanddleKeyboardKey('x')}>x</button>
+                        <button onClick={() => HanddleKeyboardKey('y')}>y</button>
+                        <button onClick={() => {HanddleKeyboardKey("^"); HanddleKeyboardKey("2")}}>a²</button>
+                        <button onClick={() => HanddleKeyboardKey('^')}>aⁿ</button>
+                        <button onClick={() => HanddleKeyboardKey('(')}>(</button>
+                        <button onClick={() => HanddleKeyboardKey(')')}>)</button>
+                        <button onClick={() => HanddleKeyboardKey('√')}>√</button>
+                        <button onClick={() => HanddleKeyboardKey('\\nthroot')}>ⁿ√</button>
+                        <button onClick={() => HanddleKeyboardKey('log')}>log</button>
+                        <button onClick={() => HanddleKeyboardKey(',')}>,</button>
+                        <button onClick={() => HanddleKeyboardKey('e')}>e</button>
+                        <button onClick={() => HanddleKeyboardKey('π')}>π</button>
                     </ul>
-                    <ul>
-                        <button onClick={() => HanddleKeyboardControls("left")}>{"<="}</button>
-                        <button onClick={() => HanddleKeyboardControls("right")}>{"=>"}</button>
-                        <button onClick={() => HanddleKeyboardControls("backspace")}>{"⌫"}</button>
+
+                    <ul className="keyboard-numbers-grid">
+                        <button onClick={() => HanddleKeyboardKey("1")}>1</button>
+                        <button onClick={() => HanddleKeyboardKey("2")}>2</button>
+                        <button onClick={() => HanddleKeyboardKey("3")}>3</button>
+                        <button onClick={() => HanddleKeyboardKey('/')}>÷</button>
+                        <button onClick={() => HanddleKeyboardKey("4")}>4</button>
+                        <button onClick={() => HanddleKeyboardKey("5")}>5</button>
+                        <button onClick={() => HanddleKeyboardKey("6")}>6</button>
+                        <button onClick={() => HanddleKeyboardKey('*')}>*</button>
+                        <button onClick={() => HanddleKeyboardKey("7")}>7</button>
+                        <button onClick={() => HanddleKeyboardKey("8")}>8</button>
+                        <button onClick={() => HanddleKeyboardKey("9")}>9</button>
+                        <button onClick={() => HanddleKeyboardKey('-')}>-</button>
+                        <button onClick={() => HanddleKeyboardKey("0")}>0</button>
+                        <button onClick={() => HanddleKeyboardKey('.')}>.</button>
+                        <button onClick={() => HanddleKeyboardKey('=')}>{"="}</button>
+                        <button onClick={() => HanddleKeyboardKey('+')}>{"+"}</button>
+                    </ul>
+
+                    <ul className="keyboard-controls-flex">
+                        <details style={{position: "relative"}}>
+                            <summary>Functions</summary>
+                            <div style={{position: "absolute", top: "0", left: "0", transform: "translateY(-100%)", background: "gray", padding: "10px"}}>
+                            <button onClick={() => HanddleKeyboardKey('sin')}>sin</button>
+                            <button onClick={() => HanddleKeyboardKey('cos')}>cos</button>
+                            </div>
+                        </details>
+                        <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+                            <button onClick={() => HanddleKeyboardControls("Left")}>{"<="}</button>
+                            <button onClick={() => HanddleKeyboardControls("Right")}>{"=>"}</button>
+                        </div>
+                        <button style={{background: "red"}} onClick={() => HanddleKeyboardControls("Backspace")}>{"⌫"}</button>
+                        <button onClick={() => HanddleKeyboardControls("Enter")}>{"↩"}</button>
                     </ul>
                 </div>
             </div>

@@ -1,16 +1,10 @@
-/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react"
-import { drawFunction } from "./functions";
+import { drawFunction, validFunction } from "./functions";
 import * as math from 'mathjs';
 
 import './graph.css';
 import { addStyles, EditableMathField } from "react-mathquill";
-import { min } from "mathjs";
-import { max } from "mathjs";
-/* import { latex_to_js } from "../../utilities/latexToJs"; */
-
-
 
 
 export default function Graph({ functionValue, setFunctionValue, latexValue, setLatexValue }) {
@@ -34,8 +28,8 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
     const handleWheel = (e) => {
         const zoomSpeed = math.ceil(zoom / 15); // Controla la velocidad del zoom
         const newZoom = e.deltaY > 0 
-            ? min(zoom + zoomSpeed, 1000)  // Zoom In
-            : max(zoom - zoomSpeed, 5); // Zoom Out
+            ? math.min(zoom + zoomSpeed, 1000)  // Zoom out
+            : math.max(zoom - zoomSpeed, 2); // Zoom in
         setZoom(newZoom);
         /* setLastMousePos({ x: e.clientX, y: e.clientY });
         setOffset(prev => ({
@@ -117,7 +111,7 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
             const unitsPerPixelY = canvas.width / zoom;
 
             
-            function setStepRecursive(unitsPerPixelX, thresholds = [ 9999, 50, 20, 10, 5, 2], steps = [1, 2, 5, 10, 20, 50], index = 0) {
+            /* function setStepRecursive(unitsPerPixelX, thresholds = [ 9999, 50, 20, 10, 5, 2], steps = [1, 2, 5, 10, 20, 50], index = 0) {
                 if (index >= thresholds.length) return;
                 if (unitsPerPixelX < thresholds[index]) {
                     setStep(steps[index]);
@@ -125,7 +119,15 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
                 }
             }
 
-            setStepRecursive(unitsPerPixelX);
+            setStepRecursive(unitsPerPixelX); */
+
+            if (unitsPerPixelX < 200) {
+                setStep(0.5);
+            }
+
+            if (unitsPerPixelX < 100) {
+                setStep(1);
+            }
 
             if (unitsPerPixelX < 40) {
                 setStep(2);
@@ -204,29 +206,6 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
                     value -= step;
                 }
             
-        }
-
-        function validFunction(funcValue) {
-            if (funcValue) {
-                try {
-                    // Crear la función dinámica
-                    const func = (x, y) => {
-                        try {
-                            
-                            return math.evaluate(funcValue, { x, y });
-                            
-                        } catch (e) {
-                            return undefined;
-                        }
-                    };
-
-                    return func;
-                } catch (e) {
-
-                    console.error("Función inválida.");
-                    return false;
-                }
-            }
         }
         
         drawGrid();

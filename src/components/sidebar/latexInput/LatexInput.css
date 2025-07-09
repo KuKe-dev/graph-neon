@@ -12,3 +12,46 @@
 #my-math-input .mq-blink {
     border-color: white;
 }
+
+.keyboard-active-button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#latex-keyboard {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 0;
+    width: 50%;
+    height: 300px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: white;
+    animation: showKeyboardAnimation 0.3s ease-in-out;
+}
+
+.keyboard-numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 30px);
+    gap: 10px;
+    padding: 10px;
+}
+
+.keyboard-numbers-grid button {
+    color: black;
+    cursor: pointer;
+}
+
+@keyframes showKeyboardAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

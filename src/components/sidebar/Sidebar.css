@@ -1,0 +1,14 @@
+.sidebar {
+    background: none;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 20px;
+}
+
+.logo {
+    width: auto;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

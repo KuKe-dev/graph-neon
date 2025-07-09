@@ -1,8 +1,33 @@
+/* eslint-disable no-unused-vars */
+import * as math from 'mathjs';
+
+export function validFunction(funcValue) {
+    if (funcValue) {
+        try {
+            // Crear la función dinámica
+            const func = (x, y) => {
+                try {
+                    
+                    return math.evaluate(funcValue, { x, y });
+                    
+                } catch (e) {
+                    return undefined;
+                }
+            };
+
+            return func;
+        } catch (e) {
+
+            console.error("Función inválida.");
+            return false;
+        }
+    }
+}
+
 export const drawFunction = (ctx, width, height, func, xScale, yScale, step, offset = { x: 0, y: 0 }) => {
     if (typeof func !== 'function') {
         return;
     }
-    console.log(func);
 
     const scaleX = width / xScale;
     const scaleY = width / yScale;

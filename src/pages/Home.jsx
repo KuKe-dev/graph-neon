@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Graph from "../components/graph/graph";
-import Sidebar from "../components/sidebar/sidebar";
+import Sidebar from "../components/sidebar/Sidebar.jsx";
 
 import "./Home.css";
 

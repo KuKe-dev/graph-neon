@@ -2,7 +2,7 @@ import LatexInput from "./latexInput/LatexInput";
 
 import "./Sidebar.css";
 
-import Logo from "../../assets/Logo-extended.png";
+import Logo from "../../assets/Logo-extended.webp";
 
 export default function Sidebar({ latexValue, functionValue, setFunctionValue }) {
     return (

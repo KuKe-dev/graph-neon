@@ -67,19 +67,7 @@ export default function LatexInput({ latexValue, functionValue, setFunctionValue
             <nav>
                 {[0, 1, 2, 3, 4].map((index) => 
                 
-                {
-                    /* const aaa = () => {
-                        if (functions[index - 1] != "" || functions[index] != "") {
-                            return (
-                                "inline-block"
-                            );
-                        } else {
-                            return (
-                                "none"
-                            );
-                        }
-                    }; */
-                    return(
+                {   return(
                     <div key={index} style={{background: "none"}}>
                         <EditableMathField
                             id={`my-math-input${index + 1}`}

@@ -1,25 +1,75 @@
-#my-math-input {
+.EditableMathField {
     background-color: transparent;
     color: white;
     width: 100%;
     text-align: center;
 }
 
-#my-math-input .mq-cursor {
+#my-math-input1.mq-focused{
+    outline: none;
+    border-color: violet;
+    box-shadow: 0px 0px 10px 2px violet;
+}
+
+#my-math-input2.mq-focused{
+    outline: none;
+    border-color: violet;
+    box-shadow: 0px 0px 10px 2px violet;
+}
+
+#my-math-input3.mq-focused{
+    outline: none;
+    border-color: violet;
+    box-shadow: 0px 0px 10px 2px violet;
+}
+
+#my-math-input4.mq-focused{
+    outline: none;
+    border-color: violet;
+    box-shadow: 0px 0px 10px 2px violet;
+}
+
+#my-math-input5.mq-focused{
+    outline: none;
+    border-color: violet;
+    box-shadow: 0px 0px 10px 2px violet;
+}
+
+#my-math-input1 .mq-cursor {
     border-color: white;
 }
 
-#my-math-input .mq-blink {
+
+#my-math-input2 .mq-cursor {
     border-color: white;
 }
+
+#my-math-input3 .mq-cursor {
+    border-color: white;
+}
+
+#my-math-input4 .mq-cursor {
+    border-color: white;
+}
+
+#my-math-input5 .mq-cursor {
+    border-color: white;
+}
+
+/* #my-math-input .mq-blink {
+    border-color: white;
+} */
 
 .keyboard-active-button {
     position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     bottom: 0;
     left: 0;
     margin: 10px;
     cursor: pointer;
-    padding: 8px 16px;
+    padding: 4px 12px;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
     border: 2px solid #00ffff;
     border-radius: 10px;
@@ -33,12 +83,15 @@
     transition: all 0.3s ease;
 }
 
+.keyboard-active-button .keyboard-icon{
+    width: 32px;
+}
+
 .keyboard-active-button:hover {
     background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     box-shadow: 
         0 0 30px rgba(0, 255, 255, 0.5),
         inset 0 0 30px rgba(0, 255, 255, 0.2);
-    transform: translateY(-2px);
 }
 
 #latex-keyboard {
@@ -94,6 +147,7 @@
 .keyboard-numbers-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    height: min-content;
     gap: 6px;
     padding: 10px;
     list-style: none;
@@ -146,21 +200,20 @@
     box-shadow: 
         0 0 20px rgba(0, 255, 255, 0.4),
         inset 0 0 20px rgba(0, 255, 255, 0.1);
-    transform: translateY(-2px);
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 
 .keyboard-numbers-grid button:active {
-    transform: translateY(0);
     box-shadow: 
         0 0 15px rgba(0, 255, 255, 0.6),
         inset 0 0 15px rgba(0, 255, 255, 0.2);
 }
 
 .keyboard-controls-flex {
-    display: flex;
-    flex-direction: column;
-    width: 100px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    width: 200px;
+    height: min-content;
     justify-content: space-between;
     padding: 15px;
     list-style: none;
@@ -208,7 +261,6 @@
     box-shadow: 
         0 0 20px rgba(0, 255, 255, 0.4),
         inset 0 0 20px rgba(0, 255, 255, 0.1);
-    transform: translateY(-2px);
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 
@@ -259,7 +311,6 @@
     box-shadow: 
         0 0 20px rgba(0, 255, 255, 0.4),
         inset 0 0 20px rgba(0, 255, 255, 0.1);
-    transform: translateY(-2px);
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 

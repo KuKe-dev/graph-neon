@@ -64,6 +64,8 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
     }
     
     useEffect(() => {
+
+        
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
 
@@ -210,7 +212,11 @@ export default function Graph({ functionValue, setFunctionValue, latexValue, set
         
         drawGrid();
         drawAxis();
-        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue), zoom, zoom, zoom/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue[0]), zoom, zoom, zoom/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue[1]), zoom, zoom, zoom/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue[2]), zoom, zoom, zoom/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue[3]), zoom, zoom, zoom/400, offset);
+        drawFunction(ctx, canvas.width, canvas.height, validFunction(functionValue[4]), zoom, zoom, zoom/400, offset);
 
     }, [zoom, functionValue, offset, step]);
 

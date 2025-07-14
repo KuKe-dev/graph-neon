@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { EditableMathField } from "react-mathquill";
 import { StaticMathField  } from "react-mathquill";
 import { latex_to_js } from "../../../utilities/latexToJs";
